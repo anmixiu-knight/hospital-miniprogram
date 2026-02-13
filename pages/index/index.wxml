@@ -1,0 +1,125 @@
+<!-- pages/index/index.wxml -->
+<view class="page-container">
+
+  <view class="nav-header">
+    <view>
+      <text class="user-welcome">你好, {{doctorName}}医生</text>
+      <text class="system-name">息肉诊断辅助系统</text>
+    </view>
+    <view class="header-btns">
+      <text class="link-btn" bindtap="handleLogout">退出</text>
+      <text class="link-btn" bindtap="handleChangePassword">改密</text>
+    </view>
+  </view>
+
+  <!-- Create Patient Section -->
+  <view class="card input-section" wx:if="{{!hasPatient}}">
+    <view class="section-header">
+      <view class="green-bar"></view>
+      <text class="section-title">新建档案</text>
+    </view>
+    <view class="form-row">
+      <text class="form-label">病历单号</text>
+      <input class="form-input" placeholder="请输入患者病历单号" value="{{currentPatientID}}" bindinput="onPatientIdInput" />
+    </view>
+    <button class="btn-primary" bindtap="createPatient">创建患者</button>
+  </view>
+
+  <block wx:else>
+    <view class="patient-info-bar">
+      <text>当前患者病历单号: {{currentPatientId}}</text>
+      <text class="close-btn" bindtap="closePatient">结束会诊</text>
+    </view>
+
+    <!-- Input Data Section -->
+    <view class="card input-section">
+      <view class="section-header">
+        <view class="green-bar"></view>
+        <text class="section-title">特征参数录入</text>
+      </view>
+
+      <view class="form-row">
+        <text class="form-label">年龄 (Age)</text>
+        <input class="form-input" type="number" placeholder="请输入" model:value="{{age}}" />
+      </view>
+
+      <view class="form-row">
+        <text class="form-label">息肉数量</text>
+        <input class="form-input" type="number" placeholder="请输入" model:value="{{polypsNumber}}" />
+      </view>
+
+      <view class="form-row">
+        <text class="form-label">长径 (mm)</text>
+        <input class="form-input" type="digit" placeholder="Long Diameter" model:value="{{longDiameter}}" />
+      </view>
+
+      <view class="form-row">
+        <text class="form-label">短径 (mm)</text>
+        <input class="form-input" type="digit" placeholder="Short Diameter" model:value="{{shortDiameter}}" />
+      </view>
+
+      <view class="form-row">
+        <text class="form-label">基底类型</text>
+        <picker mode="selector" range="{{baseTypes}}" bindchange="handleBaseTypeChange">
+          <view class="picker-display">
+            {{baseType || '请选择'}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="button-area">
+        <button class="btn-primary" bindtap="calculateResult">开始预测</button>
+        <button class="btn-secondary" bindtap="resetForm">重置</button>
+      </view>
+    </view>
+
+    <!-- Output Section -->
+    <view class="card output-section" id="result">
+      <view class="section-header">
+        <view class="green-bar"></view>
+        <text class="section-title">预测报告</text>
+      </view>
+
+      <view class="result-display-area">
+        <block wx:if="{{hasResult}}">
+          <view class="result-item">
+            <text class="result-label">恶性概率</text>
+            <text class="result-value">{{result.probability}}</text>
+          </view>
+          <view class="result-item">
+            <text class="result-label">风险等级</text>
+            <text class="result-tag {{statusClass}}">{{result.riskLevel}}</text>
+          </view>
+          <view class="advice-box">
+            <text class="advice-title">AI 建议：</text>
+            <text class="advice-content">{{result.advice}}</text>
+          </view>
+          <view class="save-section">
+            <button class="btn-save" bindtap="savePredictionResult" loading="{{isSaving}}" disabled="{{isSaving}}">
+              {{isSaving ? '保存中...' : '保存预测结果'}}
+            </button>
+
+            <!-- 保存状态提示 -->
+            <view class="save-status" wx:if="{{saveStatus}}">
+              <text class="status-text {{saveStatus.type}}">
+                {{saveStatus.message}}
+              </text>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="empty-state">
+            <text class="empty-text">等待数据输入...</text>
+          </view>
+        </block>
+      </view>
+    </view>
+  </block>
+
+  <!-- 修改密码弹窗 -->
+  <modal hidden="{{modalHidden}}" title="修改密码" confirm-text="确定" cancel-text="取消" bindconfirm="confirmChangePwd"
+    bindcancel="cancelChangePwd">
+    <input class="modal-input" type="password" placeholder="请输入新密码" model:value="{{newPasswordInput}}" />
+    <input class="modal-input" type="password" placeholder="确认新密码" model:value="{{confirmPasswordInput}}" />
+  </modal>
+</view>

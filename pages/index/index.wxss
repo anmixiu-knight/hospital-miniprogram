@@ -1,0 +1,398 @@
+/* pages/index/index.wxss */
+.page-container {
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.nav-header {
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-welcome {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.system-name {
+  display: block;
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #1b5e20;
+}
+
+.header-btns {
+    display: flex;
+    gap: 20rpx;
+}
+
+.link-btn {
+    font-size: 26rpx;
+    color: #2e7d32;
+    text-decoration: underline;
+}
+
+.patient-info-bar {
+    background-color: #e8f5e9;
+    padding: 20rpx;
+    border-radius: 10rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #1b5e20;
+    font-weight: 500;
+}
+
+.close-btn {
+    font-size: 24rpx;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
+    padding: 5rpx 15rpx;
+    border-radius: 20rpx;
+}
+
+.card {
+  background-color: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 15rpx rgba(0,0,0,0.05);
+  border: 1px solid #e8f5e9;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+  border-bottom: 1px solid #f5f5f5;
+  padding-bottom: 20rpx;
+}
+
+.green-bar {
+  width: 8rpx;
+  height: 32rpx;
+  background-color: #2e7d32;
+  border-radius: 4rpx;
+  margin-right: 15rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Input Section Styles */
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25rpx;
+  background-color: #f9fbe7; /* Very light green bg for rows */
+  padding: 20rpx;
+  border-radius: 10rpx;
+}
+
+.form-label {
+  width: 220rpx;
+  font-size: 28rpx;
+  color: #555;
+}
+
+.form-input, .picker-display {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+  text-align: right;
+  height: 1.4rem;
+}
+
+.button-area {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 40rpx;
+}
+
+.btn-primary {
+  flex: 2;
+  background-color: #2e7d32;
+  color: white;
+  font-size: 30rpx;
+}
+
+.btn-primary:active {
+  background-color: #1b5e20;
+}
+
+.btn-secondary {
+  flex: 1;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-size: 30rpx;
+}
+
+/* Output Section Styles */
+.result-display-area {
+  min-height: 200rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  padding: 40rpx 0;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 0 10rpx;
+}
+
+.result-label {
+  color: #666;
+  font-size: 30rpx;
+}
+
+.result-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.result-tag {
+  padding: 5rpx 20rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+.status-normal {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-warning {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.status-danger {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.advice-box {
+  margin-top: 30rpx;
+  background-color: #f1f8e9;
+  padding: 20rpx;
+  border-radius: 10rpx;
+}
+
+.advice-title {
+  font-weight: bold;
+  color: #2e7d32;
+  display: block;
+  margin-bottom: 10rpx;
+  font-size: 28rpx;
+}
+
+.advice-content {
+  font-size: 28rpx;
+  color: #555;
+  line-height: 1.5;
+}
+.save-section {
+  margin-top: 40rpx;
+  padding-top: 40rpx;
+  border-top: 2rpx dashed #e0e0e0;
+}
+
+.btn-save {
+  background: #2e7d32;
+  color: white;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+}
+.btn-save :active{
+  background-color: #1b5e20;
+}
+.save-status {
+  margin-top: 10rpx;
+  text-align: center;
+  font-size: 28rpx;
+}
+
+.status-text.success {
+  color: #4CAF50;
+}
+
+.status-text.error {
+  color: #F44336;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12rpx;
+  width: 85%;
+  max-width: 600rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.2);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 40rpx 40rpx 20rpx; 
+  border-bottom: 1px solid #eee; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 36rpx; 
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 48rpx; 
+  color: #999;
+  padding: 0 20rpx; 
+  cursor: pointer;
+}
+
+/* 弹窗主体 */
+.modal-body {
+  padding: 40rpx; 
+}
+
+/* 弹窗底部 */
+.modal-footer {
+  padding: 30rpx 40rpx; 
+  border-top: 1px solid #eee; 
+  display: flex;
+  gap: 20rpx; 
+}
+
+/* 按钮样式 */
+.btn-cancel, .btn-confirm {
+  flex: 1;
+  height: 88rpx; 
+  border-radius: 16rpx; 
+  font-size: 32rpx; 
+  border: none;
+}
+
+.btn-cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.btn-confirm {
+  background: #07c160;
+  color: white;
+}
+
+.btn-confirm:disabled {
+  background: #ccc;
+  color: #999;
+}
+
+/* 表单项目 */
+.form-item {
+  margin-bottom: 40rpx; 
+}
+
+.form-item .label {
+  display: block;
+  margin-bottom: 16rpx; 
+  color: #333;
+  font-weight: 500;
+  font-size: 28rpx; 
+}
+
+.form-item input {
+  width: 100%;
+  padding: 24rpx; 
+  border: 1px solid #ddd; 
+  border-radius: 12rpx; 
+  font-size: 32rpx; 
+  box-sizing: border-box;
+  height: 60rpx; 
+  line-height: 32rpx; 
+}
+
+.form-item input:focus {
+  border-color: #07c160;
+  outline: none;
+}
+
+/* 提示文字 */
+.hint-text {
+  font-size: 24rpx; 
+  color: #999;
+  margin-top: 8rpx; 
+  display: block;
+}
+
+/* 患者信息 */
+.patient-info {
+  background: #f8f9fa;
+  padding: 24rpx; 
+  border-radius: 12rpx; 
+  margin-top: 30rpx; 
+}
+
+.info-label {
+  color: #666;
+  font-size: 28rpx; 
+}
+
+.info-value {
+  color: #333;
+  font-weight: 500;
+  margin-left: 10rpx; 
+  font-size: 28rpx;
+}
+.modal-input {
+  border: 1px solid #ddd;
+  padding: 10rpx;
+  margin-bottom: 20rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}

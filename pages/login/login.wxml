@@ -1,0 +1,27 @@
+<!-- pages/login/login.wxml -->
+<view class="login-container">
+  <view class="logo-area">
+    <view class="icon-circle">
+        <text class="icon-text">+</text>
+    </view>
+    <text class="app-title">医疗数据平台</text>
+  </view>
+  
+  <view class="login-form">
+    <view class="input-group">
+      <text class="label">账号</text>
+      <input class="input" type="text" placeholder="请输入医生/管理员账号"  value="{{username}}"  bindinput="onUsernameInput"/>
+    </view>
+    
+    <view class="input-group">
+      <text class="label">密码</text>
+      <input class="input" type="password" placeholder="请输入密码" value="{{password}}" bindinput="onPasswordInput"/>
+    </view>
+
+    <button class="btn-login" bindtap="handleLogin">安全登录</button>
+  </view>
+  
+  <view class="footer">
+    <text>仅限内部人员使用</text>
+  </view>
+</view>
