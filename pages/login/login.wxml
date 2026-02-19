@@ -15,7 +15,14 @@
     
     <view class="input-group">
       <text class="label">密码</text>
-      <input class="input" type="password" placeholder="请输入密码" value="{{password}}" bindinput="onPasswordInput"/>
+      <view class="password-input-wrapper">
+        <input class="input" type="text" password="{{!showPassword}}" placeholder="请输入密码" value="{{password}}" bindinput="onPasswordInput"/>
+        <view class="eye-toggle {{showPassword ? 'is-open' : ''}}" bindtap="togglePasswordVisibility">
+          <view class="eye-shape"></view>
+          <view class="eye-pupil"></view>
+          <view class="eye-slash"></view>
+        </view>
+      </view>
     </view>
 
     <button class="btn-login" bindtap="handleLogin">安全登录</button>

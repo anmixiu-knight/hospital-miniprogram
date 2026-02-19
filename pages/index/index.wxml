@@ -60,7 +60,7 @@
 
       <view class="form-row">
         <text class="form-label">基底类型</text>
-        <picker mode="selector" range="{{baseTypes}}" bindchange="handleBaseTypeChange">
+        <picker class="form-picker" mode="selector" range="{{baseTypes}}" bindchange="handleBaseTypeChange">
           <view class="picker-display">
             {{baseType || '请选择'}}
           </view>
@@ -116,10 +116,49 @@
     </view>
   </block>
 
-  <!-- 修改密码弹窗 -->
-  <modal hidden="{{modalHidden}}" title="修改密码" confirm-text="确定" cancel-text="取消" bindconfirm="confirmChangePwd"
-    bindcancel="cancelChangePwd">
-    <input class="modal-input" type="password" placeholder="请输入新密码" model:value="{{newPasswordInput}}" />
-    <input class="modal-input" type="password" placeholder="确认新密码" model:value="{{confirmPasswordInput}}" />
-  </modal>
+  <!-- 修改密码自定义弹窗 -->
+  <view class="password-modal-mask" hidden="{{modalHidden}}" bindtap="cancelChangePwd"></view>
+  <view class="password-modal" hidden="{{modalHidden}}">
+    <view class="password-modal-header">
+      <text class="password-modal-title">修改密码</text>
+      <text class="password-modal-close" bindtap="cancelChangePwd">✕</text>
+    </view>
+    
+    <view class="password-modal-body">
+      <view class="password-input-item">
+        <input 
+          class="pwd-input" 
+          type="text" 
+          password="{{!showNewPassword}}" 
+          placeholder="新密码" 
+          placeholder-class="input-placeholder"
+          model:value="{{newPasswordInput}}" />
+        <view class="eye-toggle {{showNewPassword ? 'is-open' : ''}}" bindtap="toggleNewPasswordVisibility">
+          <view class="eye-shape"></view>
+          <view class="eye-pupil"></view>
+          <view class="eye-slash"></view>
+        </view>
+      </view>
+      
+      <view class="password-input-item">
+        <input 
+          class="pwd-input" 
+          type="text" 
+          password="{{!showConfirmPassword}}" 
+          placeholder="确认密码" 
+          placeholder-class="input-placeholder"
+          model:value="{{confirmPasswordInput}}" />
+        <view class="eye-toggle {{showConfirmPassword ? 'is-open' : ''}}" bindtap="toggleConfirmPasswordVisibility">
+          <view class="eye-shape"></view>
+          <view class="eye-pupil"></view>
+          <view class="eye-slash"></view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="password-modal-footer">
+      <button class="btn-cancel" bindtap="cancelChangePwd">取消</button>
+      <button class="btn-confirm" bindtap="confirmChangePwd">确定</button>
+    </view>
+  </view>
 </view>

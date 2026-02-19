@@ -34,9 +34,11 @@
 }
 
 .app-title {
-  font-size: 40rpx;
-  font-weight: bold;
+  font-size: 44rpx; /* 加大标题 */
+  font-weight: 800;
   color: #1b5e20;
+  letter-spacing: 4rpx; /* 增加字间距显得更正式 */
+  text-shadow: 0 4rpx 8rpx rgba(27, 94, 32, 0.15); /* 增加投影 */
 }
 
 .login-form {
@@ -44,7 +46,7 @@
   background-color: white;
   padding: 40rpx;
   border-radius: 20rpx;
-  box-shadow: 0 4rpx 15rpx rgba(0,0,0,0.05);
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.05);
 }
 
 .input-group {
@@ -69,6 +71,79 @@
 
 .input:focus {
   border-bottom-color: #2e7d32;
+}
+
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper .input {
+  padding-right: 50rpx;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 0;
+  width: 60rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* 眼睛外框 (杏仁形) */
+.eye-shape {
+  width: 32rpx;
+  height: 20rpx;
+  border: 3rpx solid #999;
+  border-radius: 70% 15%; /* 杏仁形状 */
+  transform: rotate(45deg);
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+/* 瞳孔 (圆点) */
+.eye-pupil {
+  width: 10rpx;
+  height: 10rpx;
+  background-color: #999;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.2s;
+}
+
+/* 斜线 (闭眼时的线) */
+.eye-slash {
+  width: 36rpx;
+  height: 3rpx;
+  background-color: #999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  opacity: 1; /* 默认显示 (闭眼) */
+  transition: opacity 0.2s;
+  border-radius: 2rpx;
+}
+
+/* --- 睁眼状态 (激活态) --- */
+.eye-toggle.is-open .eye-slash {
+  opacity: 0;
+}
+
+.eye-toggle.is-open .eye-shape {
+  border-color: #2e7d32;
+}
+
+.eye-toggle.is-open .eye-pupil {
+  background-color: #2e7d32;
 }
 
 .btn-login {
