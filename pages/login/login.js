@@ -4,6 +4,9 @@ Page({
     username: "",
     password: "",
     showPassword: false,
+    showChangePasswordModal: false,
+    newPassword: "",
+    showNewPassword: false // 新增：控制新密码显示隐藏
   },
 
   onUsernameInput(e) {
@@ -24,7 +27,14 @@ Page({
       showPassword: !this.data.showPassword,
     });
   },
+//切换新密码显示/隐藏
+  toggleNewPasswordVisibility() {
+    this.setData({
+      showNewPassword: !this.data.showNewPassword,
+    });
+  },
 
+  // 
   // 登录函数
   async handleLogin() {
     const { username, password } = this.data;
@@ -52,6 +62,15 @@ Page({
       wx.hideLoading();
       if (result.code === 0 || result.success) {
         console.log("登录成功:", result);
+
+        if (this.data.password === "123456") {
+          this.setData({
+            showChangePasswordModal: true,
+            newPassword: "" // 清空以免回显旧密码
+          });
+          return;
+        }
+
         wx.showToast({
           title: "登录成功",
           icon: "success",
@@ -89,6 +108,59 @@ Page({
         title: errorMsg,
         icon: "none",
         duration: 2000,
+      });
+    }
+  },
+
+  onNewPasswordInput(e) {
+    this.setData({
+      newPassword: e.detail.value,
+    });
+  },
+
+  async handleChangePasswordConfirm() {
+    const { newPassword } = this.data;
+    if (!newPassword || newPassword.length < 3 || newPassword.length > 12) {
+      wx.showToast({
+        title: "密码长度需3-12位",
+        icon: "none",
+      });
+      return;
+    }
+    if (newPassword === "123456") {
+      wx.showToast({
+        title: "新密码不能是123456",
+        icon: "none",
+      });
+      return;
+    }
+
+    try {
+      const res = await api.updatePassword(newPassword);
+      if (res.code === 0 || res.success) {
+        wx.showToast({
+          title: "修改成功",
+          icon: "success",
+        });
+        this.setData({
+          showChangePasswordModal: false,
+        });
+        setTimeout(() => {
+          wx.reLaunch({
+            url: "/pages/index/index",
+          });
+        }, 1000);
+      } else {
+        wx.showToast({
+          title: res.message || "修改失败",
+          icon: "none",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      wx.showToast({
+        title: (err && err.message) || "修改失败，请重试",
+        icon: "none",
       });
     }
   },

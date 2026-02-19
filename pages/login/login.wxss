@@ -154,15 +154,25 @@
 /* 5. 眼睛图标按钮：保持原有 QQ 风格逻辑，微调位置 */
 .eye-toggle {
   position: absolute;
-  right: 15rpx;
-  top: 0;
-  bottom: 0;
-  width: 60rpx; /* 图标区域宽度 */
+  right: 15rpx; /* ??????? */
+  top: 50%; /* ???? */
+  transform: translateY(-50%); /* ?????? */
+  width: 60rpx; /* ?????? */
+  height: 60rpx; /* ???????flex????????0 */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 1000; /* ???? */
+}
+
+/* ?? Modal ?? eye-toggle ???? */
+.modal-pwd-wrapper .eye-toggle {
+  position: absolute;
+  right: 10rpx; /* ???? */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2002; /* ???????? modal-content */
 }
 
 /* QQ 风格眼睛绘制代码复用 */
@@ -241,4 +251,96 @@
   font-size: 24rpx;
   text-align: center;
   animation: fadeIn 1s ease-out 0.5s backwards; /* 延迟更久 */
+}
+
+/* ǿ���޸�����ģ̬�� */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 80%;
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-sizing: border-box;
+  position: relative; /* ??z-index?? */
+  z-index: 1001; /* ?????? */
+}
+
+.modal-header {
+  font-size: 36rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30rpx;
+  color: #333;
+}
+
+.modal-body {
+  margin-bottom: 40rpx;
+}
+
+.modal-tip {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.modal-input {
+  /* flex: 1;  ??flex??? width:100% ???? */
+  width: 100%;
+  height: 80rpx;
+  border: 1px solid #ddd;
+  border-radius: 10rpx;
+  padding: 0 80rpx 0 20rpx; /* ?????????? */
+  box-sizing: border-box;
+  font-size: 30rpx;
+  position: relative; /* ????z-index */
+  z-index: 10;
+}
+
+.modal-pwd-wrapper {
+  margin-top: 20rpx;
+  position: relative; /* ??????? */
+  display: flex; /* flex?? */
+  align-items: center; /* ???? */
+  width: 100%; /* ??????? */
+}
+
+/* ???????? .password-input-wrapper .modal-input ?????????? */
+/* .password-input-wrapper .modal-input {
+  padding-right: 80rpx !important; 
+} */
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-confirm {
+  width: 100%;
+  height: 88rpx;
+  display: flex !important; /* ?? flex ?? */
+  align-items: center !important; /* ?????? */
+  justify-content: center !important; /* ?????? */
+  background: linear-gradient(135deg, #43a047, #2e7d32);
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  border: none;
+  padding: 0 !important; /* ????????? */
+  line-height: normal !important; /* ?????? */
+}
+.btn-confirm::after {
+  border: none; /* ???????? */
 }

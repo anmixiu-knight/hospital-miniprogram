@@ -31,4 +31,25 @@
   <view class="footer">
     <text>仅限内部人员使用</text>
   </view>
+  
+    <!-- 强制修改密码弹窗 -->
+    <view class="modal-mask" wx:if="{{showChangePasswordModal}}">
+      <view class="modal-content">
+        <view class="modal-header">需修改初始密码</view>
+        <view class="modal-body">
+          <text class="modal-tip">检测到您使用的是初始密码，请设置新密码（长度3-12位，且不为123456）</text>
+          <view class="modal-pwd-wrapper"> <!-- 移除 password-input-wrapper 类，避免样式污染 -->
+            <input class="modal-input" type="text" password="{{!showNewPassword}}" placeholder="请输入新密码" bindinput="onNewPasswordInput" value="{{newPassword}}"/>
+            <view class="eye-toggle {{showNewPassword ? 'is-open' : ''}}" bindtap="toggleNewPasswordVisibility">
+              <view class="eye-shape"></view>
+              <view class="eye-pupil"></view>
+              <view class="eye-slash"></view>
+            </view>
+          </view>
+        </view>
+        <view class="modal-footer">
+          <button class="btn-confirm" bindtap="handleChangePasswordConfirm">确认修改</button>
+        </view>
+      </view>
+    </view>
 </view>
