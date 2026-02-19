@@ -1,30 +1,53 @@
 /* pages/login/login.wxss */
+
+/* 1. 整体容器：使用柔和的渐变背景，垂直居中 */
 .login-container {
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center; /* 垂直居中 */
   align-items: center;
-  padding: 80rpx 40rpx;
-  background-color: #e8f5e9; /* 稍微深一点的背景 */
+  padding: 40rpx;
+  background: linear-gradient(
+    135deg,
+    #e8f5e9 0%,
+    #ffffff 100%
+  ); /* 浅绿到白色的清新渐变 */
+  box-sizing: border-box;
 }
 
+/* 2. Logo 区域：加大尺寸，增加投影 */
 .logo-area {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 80rpx;
+  margin-bottom: 60rpx;
+  animation: fadeInDown 0.8s ease-out; /* 简单的入场动画 */
 }
 
 .icon-circle {
-  width: 140rpx;
-  height: 140rpx;
-  background-color: #2e7d32; /* 医疗深绿 */
-  border-radius: 50%;
+  width: 160rpx;
+  height: 160rpx;
+  background: linear-gradient(135deg, #43a047, #2e7d32); /* 图标也用渐变 */
+  border-radius: 40rpx; /* 圆角矩形比纯圆更现代 */
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10rpx 20rpx rgba(46, 125, 50, 0.3);
-  margin-bottom: 20rpx;
+  box-shadow: 0 20rpx 40rpx rgba(46, 125, 50, 0.2);
+  margin-bottom: 30rpx;
+  position: relative;
+}
+
+/* 装饰性光泽 */
+.icon-circle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 40rpx;
+  background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
 }
 
 .icon-text {
@@ -34,21 +57,57 @@
 }
 
 .app-title {
-  font-size: 44rpx; /* 加大标题 */
-  font-weight: 800;
+  font-size: 48rpx;
+  font-weight: 600;
   color: #1b5e20;
-  letter-spacing: 4rpx; /* 增加字间距显得更正式 */
-  text-shadow: 0 4rpx 8rpx rgba(27, 94, 32, 0.15); /* 增加投影 */
+  letter-spacing: 2rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
 }
 
+/* 3. 登录表单卡片：悬浮感 */
 .login-form {
   width: 100%;
+  max-width: 600rpx;
   background-color: white;
-  padding: 40rpx;
-  border-radius: 20rpx;
-  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.05);
+  padding: 50rpx 40rpx;
+  border-radius: 30rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.05); /* 柔和的大投影 */
+  animation: fadeInUp 0.8s ease-out 0.2s backwards; /* 延迟入场，使用backwards保留初始状态 */
 }
 
+/* 动画定义 */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 4. 输入框组：现代风格，背景色填充 */
 .input-group {
   margin-bottom: 40rpx;
 }
@@ -57,22 +116,31 @@
   display: block;
   margin-bottom: 15rpx;
   font-size: 28rpx;
-  color: #555;
-  font-weight: 500;
+  color: #4caf50; /* 标签使用强调色 */
+  font-weight: 600;
 }
 
+/* 通用输入框样式 */
 .input {
   width: 100%;
-  height: 80rpx;
-  border-bottom: 2px solid #e0e0e0;
+  height: 90rpx;
+  background-color: #f5f7f6; /* 浅灰背景 */
+  border-radius: 12rpx;
+  padding: 0 24rpx;
   font-size: 30rpx;
   color: #333;
+  box-sizing: border-box; /* 确保 padding 不撑大 */
+  border: 2rpx solid transparent; /* 预留边框位置 */
+  transition: all 0.3s;
 }
 
 .input:focus {
-  border-bottom-color: #2e7d32;
+  background-color: #fff;
+  border-color: #2e7d32; /* 聚焦时边框变绿 */
+  box-shadow: 0 0 10rpx rgba(46, 125, 50, 0.1);
 }
 
+/* 密码框特殊处理 */
 .password-input-wrapper {
   position: relative;
   display: flex;
@@ -80,14 +148,16 @@
 }
 
 .password-input-wrapper .input {
-  padding-right: 50rpx;
+  padding-right: 80rpx !important; /* 给眼睛图标留位置，强制覆盖 */
 }
 
+/* 5. 眼睛图标按钮：保持原有 QQ 风格逻辑，微调位置 */
 .eye-toggle {
   position: absolute;
-  right: 0;
-  width: 60rpx;
-  height: 100%;
+  right: 15rpx;
+  top: 0;
+  bottom: 0;
+  width: 60rpx; /* 图标区域宽度 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,22 +165,21 @@
   z-index: 10;
 }
 
-/* 眼睛外框 (杏仁形) */
+/* QQ 风格眼睛绘制代码复用 */
 .eye-shape {
   width: 32rpx;
   height: 20rpx;
-  border: 3rpx solid #999;
-  border-radius: 70% 15%; /* 杏仁形状 */
+  border: 3rpx solid #b0bec5; /* 颜色更淡一点适配浅色背景 */
+  border-radius: 70% 15%;
   transform: rotate(45deg);
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
 
-/* 瞳孔 (圆点) */
 .eye-pupil {
   width: 10rpx;
   height: 10rpx;
-  background-color: #999;
+  background-color: #b0bec5;
   border-radius: 50%;
   position: absolute;
   top: 50%;
@@ -119,48 +188,57 @@
   transition: background-color 0.2s;
 }
 
-/* 斜线 (闭眼时的线) */
 .eye-slash {
   width: 36rpx;
   height: 3rpx;
-  background-color: #999;
+  background-color: #b0bec5;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-45deg);
-  opacity: 1; /* 默认显示 (闭眼) */
+  opacity: 1; /* 闭眼时显示斜杠 */
   transition: opacity 0.2s;
   border-radius: 2rpx;
 }
 
-/* --- 睁眼状态 (激活态) --- */
+/* 睁眼状态 */
 .eye-toggle.is-open .eye-slash {
   opacity: 0;
 }
-
 .eye-toggle.is-open .eye-shape {
   border-color: #2e7d32;
 }
-
 .eye-toggle.is-open .eye-pupil {
   background-color: #2e7d32;
 }
 
+/* 6. 登录按钮：渐变色、大圆角 */
 .btn-login {
-  background-color: #2e7d32;
+  background: linear-gradient(90deg, #43a047, #2e7d32);
   color: white;
   font-weight: bold;
+  font-size: 34rpx;
+  height: 96rpx;
+  display: flex; /* 确保 flex 布局使文字居中 */
+  align-items: center;
+  justify-content: center;
   margin-top: 60rpx;
-  border-radius: 50rpx;
-  box-shadow: 0 6rpx 12rpx rgba(46, 125, 50, 0.4);
+  border-radius: 48rpx; /* 全圆角 */
+  box-shadow: 0 10rpx 20rpx rgba(43, 160, 71, 0.3);
+  border: none;
+  transition: all 0.2s;
 }
 
 .btn-login:active {
-  background-color: #1b5e20;
+  transform: scale(0.98);
+  box-shadow: 0 5rpx 10rpx rgba(43, 160, 71, 0.3);
 }
 
+/* 7. 底部版权 */
 .footer {
-  margin-top: auto;
-  color: #999;
+  margin-top: 60rpx;
+  color: #b0bec5;
   font-size: 24rpx;
+  text-align: center;
+  animation: fadeIn 1s ease-out 0.5s backwards; /* 延迟更久 */
 }
