@@ -30,8 +30,10 @@ Page({
 
     // 修改密码弹窗
     modalHidden: true,
+    oldPasswordInput: "",
     newPasswordInput: "",
     confirmPasswordInput: "",
+    showOldPassword: false,
     showNewPassword: false,
     showConfirmPassword: false,
   },
@@ -281,6 +283,21 @@ Page({
       "High Risk": "高风险",
       "Very High Risk": "极高风险",
     };
+    const adviceMap = new Map([
+      ["Follow-up is not required", "无需随访"],
+      [
+        "Follow-up ultrasound is recommended at 6 months, 1 year, and 2 years;\n Follow-up should be discontinued after 2 years in the absence of growth.",
+        "建议于6个月、1年及2年进行超声随访；若2年内病灶无增大，应停止随访。",
+      ],
+      [
+        "Cholecystectomy is recommended if the patient is fit for, and accepts, surgery;\n MDT discussion may be considered",
+        "若患者具备手术指征且可耐受手术，建议行胆囊切除术；可考虑进行多学科团队MDT讨论。",
+      ],
+      [
+        "Cholecystectomy is strongly recommended if the patient is fit for, and accepts, surgery",
+        "若患者具备手术指征且可耐受手术，强烈建议行胆囊切除术。",
+      ],
+    ]);
 
     // 根据API返回结构解析数据
     let originProbility = "";
@@ -294,7 +311,7 @@ Page({
       probability = (apiResult.probability * 100).toFixed(1) + "%";
       riskLevel =
         riskLevelMap[apiResult.risk_level] || apiResult.risk_level || "未知";
-      advice = apiResult.advice || "请咨询专业医生";
+      advice = adviceMap.get(apiResult.advice || "请咨询专业医生") || "请咨询专业医生";
 
       // 根据风险等级设置样式类
       if (riskLevel.includes("高")) {
@@ -374,8 +391,10 @@ Page({
   handleChangePassword() {
     this.setData({
       modalHidden: false,
+      oldPasswordInput: "",
       newPasswordInput: "",
       confirmPasswordInput: "",
+      showOldPassword: false,
       showNewPassword: false,
       showConfirmPassword: false,
     });
@@ -383,9 +402,10 @@ Page({
 
   // 确认修改密码
   async confirmChangePwd() {
-    const { newPasswordInput, confirmPasswordInput } = this.data;
+    const { oldPasswordInput, newPasswordInput, confirmPasswordInput } =
+      this.data;
 
-    if (!newPasswordInput || !confirmPasswordInput) {
+    if (!oldPasswordInput || !newPasswordInput || !confirmPasswordInput) {
       wx.showToast({
         title: "请填写完整",
         icon: "none",
@@ -406,65 +426,98 @@ Page({
     });
 
     try {
-      const result = await api.updatePassword(newPasswordInput);
-      console.log("密码修改成功:", result);
-      this.resetPasswordForm();
-      this.setData({
-        modalHidden: true,
-      });
-      wx.showToast({
-        title: "密码修改成功",
-        icon: "success",
-        duration: 2000,
-      });
-      setTimeout(() => {
-        this.showReLoginPrompt();
-      }, 1500);
-    } catch (error) {
-      console.error("密码修改失败:", error);
-      let errorMessage = "密码修改失败";
-      let showRelogin = false;
-      // 解析错误信息
-      if (error && typeof error === "object") {
-        // 网络错误
-        if (error.errMsg && error.errMsg.includes("fail")) {
-          errorMessage = "网络错误，请检查网络连接";
-        }
-        // 业务错误
-        else if (error.message) {
-          errorMessage = error.message;
-        }
-        // 响应数据中的错误
-        else if (error.data) {
-          if (typeof error.data === "string") {
-            errorMessage = error.data;
-          } else if (error.data.message) {
-            errorMessage = error.data.message;
-          }
-
-          // 如果是token过期或无效，提示重新登录
-          if (error.data.code === 401 || error.data.code === 403) {
-            showRelogin = true;
-            errorMessage = "登录已过期，请重新登录";
-          }
-        }
-        wx.showToast({
-          title: errorMessage,
-          icon: "none",
-          duration: 3000,
+      const result = await api.updatePassword(
+        oldPasswordInput,
+        newPasswordInput,
+      );
+      if (result && result.success === true) {
+        console.log("密码修改成功:", result);
+        this.resetPasswordForm();
+        this.setData({
+          modalHidden: true,
         });
-      }
-      if (showRelogin) {
+        wx.showToast({
+          title: "密码修改成功",
+          icon: "success",
+          duration: 2000,
+        });
         setTimeout(() => {
-          this.performLogout();
-        }, 3000);
+          this.showReLoginPrompt();
+        }, 1500);
+      } else {
+        // 业务逻辑失败（如旧密码错误）
+        console.log("密码修改业务失败:", result);
+        
+        // 提取错误信息
+        let errorMessage = result?.message || "密码修改失败";
+        
+        // 处理旧密码错误
+        if (errorMessage.includes("旧密码") || errorMessage.includes("原密码")) {
+          wx.showModal({
+            title: "提示",
+            content: "旧密码错误，请重新输入",
+            showCancel: false,
+            success: () => {
+              // 可以聚焦到旧密码输入框
+              this.setData({
+                oldPasswordInput: "" // 清空旧密码输入
+              });
+            }
+          });
+        } else {
+          wx.showToast({
+            title: errorMessage,
+            icon: "none",
+            duration: 3000,
+          });
+        }
+        
+        // 处理需要重新登录的情况
+        if (result?.code === 401 || result?.code === 403) {
+          setTimeout(() => {
+            this.performLogout();
+          }, 3000);
+        }
       }
+    } catch (error) {
+      console.error("密码修改网络错误或异常:", error);
+      
+      let errorMessage = "网络连接失败";
+      
+      // 处理网络错误
+      if (error && typeof error === "object") {
+        // 微信小程序网络错误
+        if (error.errMsg) {
+          if (error.errMsg.includes("timeout")) {
+            errorMessage = "网络超时，请稍后重试";
+          } else if (error.errMsg.includes("fail")) {
+            errorMessage = "网络连接失败，请检查网络设置";
+          } else {
+            errorMessage = `网络错误: ${error.errMsg}`;
+          }
+        }
+        // 其他异常（如代码错误）
+        else if (error.message) {
+          errorMessage = `系统错误: ${error.message}`;
+        }
+      }
+      
+      // 显示网络错误提示
+      wx.showToast({
+        title: errorMessage,
+        icon: "none",
+        duration: 3000,
+      });
+      
+      // 注意：网络错误一般不需要重新登录
+      // 也不需要清空旧密码输入框
     } finally {
       wx.hideLoading();
     }
   },
   resetPasswordForm() {
     this.setData({
+      oldPasswordInput: "",
       newPasswordInput: "",
       confirmPasswordInput: "",
     });
@@ -505,6 +558,13 @@ Page({
     });
   },
 
+  // 切换旧密码显示/隐藏
+  toggleOldPasswordVisibility() {
+    this.setData({
+      showOldPassword: !this.data.showOldPassword,
+    });
+  },
+
   // 切换新密码显示/隐藏
   toggleNewPasswordVisibility() {
     this.setData({
@@ -529,9 +589,9 @@ Page({
       console.log("保存数据:", saveData);
       const response = await api.savePredictionResult(saveData);
       console.log("保存响应:", response);
-      if (response.success || response.code === 0) {
-        wx.showToast({
-          title: "保存成功",
+      if (response.success || response.code === 0) {                   
+        wx.showToast({                       
+          title: "保存成功",                     
           icon: "success",
           duration: 1500,
         });

@@ -35,9 +35,19 @@
     <!-- 强制修改密码弹窗 -->
     <view class="modal-mask" wx:if="{{showChangePasswordModal}}">
       <view class="modal-content">
-        <view class="modal-header">需修改初始密码</view>
+        <view class="modal-header">需重置密码</view>
         <view class="modal-body">
-          <text class="modal-tip">检测到您使用的是初始密码，请设置新密码（长度3-12位，且不为123456）</text>
+          <text class="modal-tip">为了您的账户安全，首次登录或密码过期需重置密码（长度3-12位）</text>
+          
+          <view class="modal-pwd-wrapper" style="margin-bottom: 20rpx;">
+            <input class="modal-input" type="text" password="{{!showOldPasswordInput}}" placeholder="请输入旧密码" bindinput="onOldPasswordInput" value="{{oldPasswordInput}}"/>
+            <view class="eye-toggle {{showOldPasswordInput ? 'is-open' : ''}}" bindtap="toggleOldPasswordVisibility">
+              <view class="eye-shape"></view>
+              <view class="eye-pupil"></view>
+              <view class="eye-slash"></view>
+            </view>
+          </view>
+
           <view class="modal-pwd-wrapper"> <!-- 移除 password-input-wrapper 类，避免样式污染 -->
             <input class="modal-input" type="text" password="{{!showNewPassword}}" placeholder="请输入新密码" bindinput="onNewPasswordInput" value="{{newPassword}}"/>
             <view class="eye-toggle {{showNewPassword ? 'is-open' : ''}}" bindtap="toggleNewPasswordVisibility">

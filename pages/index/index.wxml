@@ -129,6 +129,21 @@
         <input 
           class="pwd-input" 
           type="text" 
+          password="{{!showOldPassword}}" 
+          placeholder="旧密码" 
+          placeholder-class="input-placeholder"
+          model:value="{{oldPasswordInput}}" />
+        <view class="eye-toggle {{showOldPassword ? 'is-open' : ''}}" bindtap="toggleOldPasswordVisibility">
+          <view class="eye-shape"></view>
+          <view class="eye-pupil"></view>
+          <view class="eye-slash"></view>
+        </view>
+      </view>
+
+      <view class="password-input-item">
+        <input 
+          class="pwd-input" 
+          type="text" 
           password="{{!showNewPassword}}" 
           placeholder="新密码" 
           placeholder-class="input-placeholder"

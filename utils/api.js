@@ -2,7 +2,7 @@
 const config = {
   baseUrl: "http://127.0.0.1:8080/api", // SpringBoot 后端
   predictUrl: "http://127.0.0.1:8087/api", // Flask 预测服务
-};
+};//////
 
 // 统一请求封装
 const request = (url, method, data, header = {}) => {
@@ -64,13 +64,14 @@ const login = ({ username, password }) => {
 };
 
 // 2. 修改密码
-const updatePassword = (newPassword) => {
-  return request(config.baseUrl + "/user/update", "PUT", { newPassword }).then(
-    (res) => {
-      if (res.statusCode === 200) return res.data;
-      throw res.data;
-    },
-  );
+const updatePassword = (oldPassword, newPassword) => {
+  return request(config.baseUrl + "/user/update", "PUT", {
+    oldPassword,
+    newPassword,
+  }).then((res) => {
+    if (res.statusCode === 200) return res.data;
+    throw res.data;
+  });
 };
 
 // 3. 获取用户状态
