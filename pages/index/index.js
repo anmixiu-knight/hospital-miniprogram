@@ -283,21 +283,18 @@ Page({
       "High Risk": "高风险",
       "Very High Risk": "极高风险",
     };
-    const adviceMap = new Map([
-      ["Follow-up is not required", "无需随访"],
-      [
-        "Follow-up ultrasound is recommended at 6 months, 1 year, and 2 years;\n Follow-up should be discontinued after 2 years in the absence of growth.",
-        "建议于6个月、1年及2年进行超声随访；若2年内病灶无增大，应停止随访。",
-      ],
-      [
-        "Cholecystectomy is recommended if the patient is fit for, and accepts, surgery;\n MDT discussion may be considered",
-        "若患者具备手术指征且可耐受手术，建议行胆囊切除术；可考虑进行多学科团队MDT讨论。",
-      ],
-      [
-        "Cholecystectomy is strongly recommended if the patient is fit for, and accepts, surgery",
+    const adviceMap = {
+      "Follow-up is not required":"无需随访",
+      
+        "Follow-up ultrasound is recommended at 6 months, 1 year, and 2 years; Follow-up should be discontinued after 2 years in the absence of growth.":
+        "建议于6个月、1年及2年进行超声随,若2年内病灶无增大,应停止随访。",
+      
+        "Cholecystectomy is recommended if the patient is fit for, and accepts, surgery; MDT discussion may be considered":
+        "若患者具备手术指征且可耐受手术,建议行胆囊切除术,可考虑进行多学科团队MDT讨论。",
+      
+        "Cholecystectomy is strongly recommended if the patient is fit for, and accepts, surgery":
         "若患者具备手术指征且可耐受手术，强烈建议行胆囊切除术。",
-      ],
-    ]);
+  };
 
     // 根据API返回结构解析数据
     let originProbility = "";
@@ -310,9 +307,8 @@ Page({
       originProbility = apiResult.probability;
       probability = (apiResult.probability * 100).toFixed(1) + "%";
       riskLevel =
-        riskLevelMap[apiResult.risk_level] || apiResult.risk_level || "未知";
-      advice = adviceMap.get(apiResult.advice || "请咨询专业医生") || "请咨询专业医生";
-
+        riskLevelMap[apiResult.risk_level] || "未知";
+      advice = adviceMap[apiResult.advice] || "请咨询专业医生";
       // 根据风险等级设置样式类
       if (riskLevel.includes("高")) {
         statusClass = "high-risk";
@@ -652,6 +648,19 @@ Page({
       广基型: 2,
     };
     const baseNum = baseTypeMap[baseType];
+    const adviceBackMap = {
+      "无需随访": "Follow-up is not required",
+
+      "建议于6个月、1年及2年进行超声随,若2年内病灶无增大,应停止随访。":
+        "Follow-up ultrasound is recommended at 6 months, 1 year, and 2 years; Follow-up should be discontinued after 2 years in the absence of growth.",
+
+      "若患者具备手术指征且可耐受手术,建议行胆囊切除术,可考虑进行多学科团队MDT讨论。":
+        "Cholecystectomy is recommended if the patient is fit for, and accepts, surgery; MDT discussion may be considered",
+
+      "若患者具备手术指征且可耐受手术，强烈建议行胆囊切除术。":
+        "Cholecystectomy is strongly recommended if the patient is fit for, and accepts, surgery",
+    };
+    const adviceBack = adviceBackMap[result.advice] || result.advice;
     return {
       clinicNumber: currentPatientId,
       age: parseInt(age),
@@ -661,7 +670,7 @@ Page({
       baseType: baseNum,
       probability: originProbility,
       riskLevel: riskLevel,
-      advice: result.advice || "请咨询专业医生",
+      advice: adviceBack,
     };
   },
   askResetForm() {
