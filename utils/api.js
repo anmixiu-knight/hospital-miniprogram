@@ -1,7 +1,6 @@
 // 配置本地环境地址
 const config = {
   baseUrl: "http://127.0.0.1:8080/api", // SpringBoot 后端
-  predictUrl: "http://127.0.0.1:8087/api", // Flask 预测服务
 };//////
 
 // 统一请求封装
@@ -115,12 +114,12 @@ const savePredictionResult = (predictionData) => {
 // 7. 预测
 const predict = (data) => {
   return new Promise((resolve, reject) => {
-    request(config.predictUrl + "/predict", "POST", {
-      age: Number(data.age),
-      polyps: Number(data.polyps),
-      long_diameter: Number(data.long_diameter),
-      short_diameter: Number(data.short_diameter),
-      base: Number(data.base),
+    request(config.baseUrl + "/doctor/input", "POST", {
+      age: String(data.age),
+      polyps: String(data.polyps),
+      long_diameter: String(data.long_diameter),
+      short_diameter: String(data.short_diameter),
+      base: String(data.base),
     })
       .then((res) => {
         console.log("预测API响应:", res);

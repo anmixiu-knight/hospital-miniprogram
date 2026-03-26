@@ -267,7 +267,7 @@ Page({
       wx.hideLoading();
       console.log("预测结果:", result);
       // 处理结果
-      this.handlePredictionResult(result.result);
+      this.handlePredictionResult(result);
     } catch (error) {
       wx.hideLoading();
       console.error("预测失败:", error);
