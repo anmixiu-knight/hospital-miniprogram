@@ -50,7 +50,6 @@ Page({
     api
       .getUserStatus()
       .then((res) => {
-        console.log("用户状态:", res);
         this.setData({
           doctorName: res.data.username,
         });
@@ -85,7 +84,6 @@ Page({
           icon: "success",
           duration: 1500,
         });
-        console.log("注册成功，患者信息:", result.data);
         this.setData({
           hasPatient: true,
         });
@@ -233,12 +231,6 @@ Page({
       return;
     }
     if (parseFloat(longDiameter) < parseFloat(shortDiameter)) {
-      console.log(
-        "长径:",
-        this.data.longDiameter,
-        "短径:",
-        this.data.shortDiameter,
-      );
       wx.showToast({
         title: "息肉长径长度不能小于短径长度",
         icon: "none",
@@ -262,10 +254,9 @@ Page({
         polyps: parseInt(polypsNumber),
         long_diameter: parseFloat(longDiameter),
         short_diameter: parseFloat(shortDiameter),
-        base: baseNum,
+        base: parseInt(baseNum),
       });
       wx.hideLoading();
-      console.log("预测结果:", result);
       // 处理结果
       this.handlePredictionResult(result);
     } catch (error) {
@@ -276,7 +267,6 @@ Page({
 
   // 处理预测结果
   handlePredictionResult(apiResult) {
-    console.log("API返回结果:", apiResult);
     const riskLevelMap = {
       "Low Risk": "低风险",
       "Moderate Risk": "中风险",
@@ -358,7 +348,6 @@ Page({
       title: "确认退出",
       content: "确定要退出登录吗？",
       success: (res) => {
-        console.log("tuichu", res);
         if (res.confirm) {
           api
             .logout()
@@ -427,7 +416,6 @@ Page({
         newPasswordInput,
       );
       if (result && result.success === true) {
-        console.log("密码修改成功:", result);
         this.resetPasswordForm();
         this.setData({
           modalHidden: true,
@@ -580,11 +568,8 @@ Page({
       isSaving: true,
     });
     try {
-      console.log("开始保存预测结果...");
       const saveData = this.prepareSaveData();
-      console.log("保存数据:", saveData);
       const response = await api.savePredictionResult(saveData);
-      console.log("保存响应:", response);
       if (response.success || response.code === 0) {                   
         wx.showToast({                       
           title: "保存成功",                     

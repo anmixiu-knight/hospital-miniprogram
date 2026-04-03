@@ -1,6 +1,6 @@
-// 配置本地环境地址
+﻿// 配置本地环境地址
 const config = {
-  baseUrl: "http://127.0.0.1:8080/api", // SpringBoot 后端
+  baseUrl: "https://app.jdyfyddwk.cn/api", // SpringBoot 后端
 };//////
 
 // 统一请求封装
@@ -113,36 +113,38 @@ const savePredictionResult = (predictionData) => {
 
 // 7. 预测
 const predict = (data) => {
-  return new Promise((resolve, reject) => {
-    request(config.baseUrl + "/doctor/input", "POST", {
-      age: String(data.age),
-      polyps: String(data.polyps),
-      long_diameter: String(data.long_diameter),
-      short_diameter: String(data.short_diameter),
-      base: String(data.base),
-    })
-      .then((res) => {
-        console.log("预测API响应:", res);
-        if (res.statusCode === 200) {
-          const result = res.data?.result;
-          // 严格校验返回格式
-          if (
-            result &&
-            result.probability !== undefined &&
-            result.risk_level &&
-            result.advice
-          ) {
-            resolve(res.data);
-          } else {
-            reject(new Error("API返回数据格式不完整"));
-          }
-        } else if (res.statusCode === 400) {
-          reject(new Error("参数错误: " + (res.data?.message || "请检查输入")));
-        } else {
-          reject(new Error(`请求失败: ${res.statusCode}`));
-        }
-      })
-      .catch(reject);
+  const query =
+    `?age=${encodeURIComponent(String(data.age))}` +
+    `&polypsNumber=${encodeURIComponent(String(data.polyps))}` +
+    `&longDiameter=${encodeURIComponent(String(data.long_diameter))}` +
+    `&shortDiameter=${encodeURIComponent(String(data.short_diameter))}` +
+    `&baseType=${encodeURIComponent(String(data.base))}`;
+
+  const url = config.baseUrl + "/doctor/input" + query;
+
+  return request(url, "POST", undefined, {
+    "Content-Type": "application/x-www-form-urlencoded",
+  }).then((res) => {
+    if (res.statusCode !== 200) {
+      throw new Error(`请求失败: ${res.statusCode}`);
+    }
+
+    if (!res.data || res.data.success !== true) {
+      throw new Error(res.data?.message || "预测失败");
+    }
+
+    const result = res.data.data;
+
+    if (
+      !result ||
+      result.probability === undefined ||
+      result.risk_level === undefined ||
+      result.advice === undefined
+    ) {
+      throw new Error("API返回数据格式不完整");
+    }
+
+    return result;
   });
 };
 
